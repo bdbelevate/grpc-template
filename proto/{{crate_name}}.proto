@@ -1,6 +1,7 @@
-{% assign pascal = crate_name | pascal_case %}
+{% assign name = crate_name | remove: "service" %}
+{% assign pascal = name | pascal_case %}
 syntax = "proto3";
-package cosm.{{crate_name}};
+package cosm.{{name}};
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/field_mask.proto";
@@ -19,20 +20,20 @@ message Timestamp {
 }
 
 // service definitions
-service SampleService {
+service {{pascal}}Service {
     rpc Create{{pascal}}({{pascal}}) returns ({{pascal}});
-    rpc GetSample(GetSampleRequest) returns (Sample);
-    rpc ListSamples(ListSamplesRequest) returns (stream Sample);
-    rpc UpdateSample(UpdateSampleRequest) returns (Sample);
-    rpc DeleteSample(DeleteSampleRequest) returns (google.protobuf.Empty);
+    rpc Get{{pascal}}(Get{{pascal}}Request) returns ({{pascal}});
+    rpc List{{pascal}}s(List{{pascal}}sRequest) returns (stream {{pascal}});
+    rpc Update{{pascal}}(Update{{pascal}}Request) returns ({{pascal}});
+    rpc Delete{{pascal}}(Delete{{pascal}}Request) returns (google.protobuf.Empty);
 }
 
 // organization request messages
-message GetSampleRequest {
+message Get{{pascal}}Request {
     string id = 1;
 }
 
-message ListSamplesRequest {
+message List{{pascal}}sRequest {
     enum OrderBy {
         DEFAULT = 0;
         NAME = 1;
@@ -43,7 +44,7 @@ message ListSamplesRequest {
     int32 limit = 3;
 }
 
-message UpdateSampleRequest {
+message Update{{pascal}}Request {
     string id = 1;
     string name = 2;
     string description = 3;
@@ -51,12 +52,12 @@ message UpdateSampleRequest {
     google.protobuf.FieldMask mask = 4;
 }
 
-message DeleteSampleRequest {
+message Delete{{pascal}}Request {
     string id = 1;
 }
 
 // response messages
-message Sample  {
+message {{pascal}}  {
     string id = 1;
     string name = 2;
     string description = 3;
