@@ -13,7 +13,7 @@ use tonic::{Response, Status};
 
 use crate::api::get_timestamp;
 use crate::db::id::ID;
-use crate::{{crate_name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
+use crate::{{name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
 
 pub async fn create_one(
     collection: &Collection,

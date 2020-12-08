@@ -5,7 +5,7 @@ use std::time::SystemTime;
 pub mod error;
 pub mod items;
 
-use crate::{{crate_name}}::Timestamp;
+use crate::{{name}}::Timestamp;
 
 pub fn get_timestamp() -> Timestamp {
     let ts = SystemTime::now()

@@ -5,7 +5,7 @@ use serde::Deserialize;
 use std::fs::File;
 use std::time::SystemTime;
 
-use crate::{{crate_name}}::Timestamp;
+use crate::{{name}}::Timestamp;
 
 #[derive(Debug, Deserialize)]
 struct {{pascal}} {
@@ -23,7 +23,7 @@ fn now() -> u64 {
 }
 
 #[allow(dead_code)]
-pub fn load_items() -> Vec<crate::{{crate_name}}::{{pascal}}> {
+pub fn load_items() -> Vec<crate::{{name}}::{{pascal}}> {
     let file = File::open("examples/data/samples.json").expect("failed to open data file");
 
     let decoded: Vec<{{pascal}}> =
@@ -31,7 +31,7 @@ pub fn load_items() -> Vec<crate::{{crate_name}}::{{pascal}}> {
 
     decoded
         .into_iter()
-        .map(|item| crate::{{crate_name}}::{{pascal}} {
+        .map(|item| crate::{{name}}::{{pascal}} {
             id: "None".to_string(),
             name: item.name,
             description: item.description.unwrap_or("".to_string()),
