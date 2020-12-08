@@ -16,6 +16,12 @@ cargo generate --git https://github.com/briandeboer/mongodb-service-template
 
 Answer the prompts and voila! you have a new project.
 
+Note: It will rename things and remove the word "service". So if you want to create an Events service with types called Event. Then enter the name as "EventService". That will result in a crate named `event-service` and it will have a type of message called Event.
+
+## Usage
+
+Run the cargo generate above. Then go and edit (and/or rename) the proto/sample.proto. Keep in mind that if you rename it you will need to change the build.rs accordingly.
+
 ## Getting Started
 
 - Install [Rust](https://www.rust-lang.org/tools/install)
