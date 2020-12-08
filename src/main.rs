@@ -12,7 +12,7 @@ mod db;
 
 use crate::db::DataSources;
 use {{crate_name}}::{{crate_name}}_service_server::{SampleService, SampleServiceServer};
-use orgs::{
+use {{crate_name}}::{
     DeleteSampleRequest, GetSampleRequest,
     ListSamplesRequest, Sample, UpdateSampleRequest
 };
@@ -36,7 +36,7 @@ impl SampleService for Samples {
         api::samples::create_one(&self.data_sources.samples, sample).await
     }
 
-    async fn get_organization(
+    async fn get_sample(
         &self,
         request: Request<GetSampleRequest>,
     ) -> Result<tonic::Response<Sample>, tonic::Status> {
@@ -46,7 +46,7 @@ impl SampleService for Samples {
     }
 
     type ListSamplesStream = mpsc::Receiver<Result<Sample, Status>>;
-    async fn list_organizations(
+    async fn list_samples(
         &self,
         request: Request<ListSamplesRequest>,
     ) -> Result<tonic::Response<Self::ListSamplesStream>, tonic::Status> {
@@ -60,17 +60,17 @@ impl SampleService for Samples {
         return Ok(api::samples::stream(&self.data_sources.samples, request).await);
     }
 
-    async fn update_organization(
+    async fn update_sample(
         &self,
         request: tonic::Request<UpdateSampleRequest>,
     ) -> Result<tonic::Response<Sample>, tonic::Status> {
-        warn!("UpdateOrganziation = {:?}", request);
+        warn!("UpdateSample = {:?}", request);
 
         let request = request.get_ref();
         api::samples::update_one(&self.data_sources.samples, request).await
     }
 
-    async fn delete_organization(
+    async fn delete_sample(
         &self,
         request: tonic::Request<DeleteSampleRequest>,
     ) -> Result<tonic::Response<()>, tonic::Status> {
