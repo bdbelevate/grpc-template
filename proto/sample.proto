@@ -1,7 +1,6 @@
-{% assign words = cargo_name | split: "_" %}{% capture content_type %}{% for word in words %}{{ word | capitalize }}{% endcapture %}
 syntax = "proto3";
 
-Content Type: "{{content_type}}"
+Content Type: "{{crate_name | pascal_case}}"
 package cosm.{{crate_name}};
 
 import "google/protobuf/empty.proto";
