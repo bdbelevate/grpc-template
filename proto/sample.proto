@@ -1,4 +1,4 @@
-{{assign content_type = cargo_name | capitalize | remove "_"}}
+{% assign content_type = cargo_name | capitalize | remove "_" %}
 syntax = "proto3";
 
 Content Type: "{{content_type}}"
