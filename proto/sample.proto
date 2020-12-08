@@ -21,7 +21,7 @@ message Timestamp {
 
 // service definitions
 service SampleService {
-    rpc Create{{crate_name | capitalize | remove "_"}}(Sample) returns (Sample);
+    rpc Create{{crate_name | pascal_case}}(Sample) returns (Sample);
     rpc GetSample(GetSampleRequest) returns (Sample);
     rpc ListSamples(ListSamplesRequest) returns (stream Sample);
     rpc UpdateSample(UpdateSampleRequest) returns (Sample);
