@@ -1,3 +1,6 @@
+{% assign name = crate_name | remove: "_service" %}
+{% assign pascal = name | pascal_case %}
+
 use log::warn;
 use mongodb::Client;
 use mongodb::Collection;
@@ -8,7 +11,7 @@ pub mod id;
 
 #[derive(Clone)]
 pub struct DataSources {
-    pub samples: Collection,
+    pub {{name}}s: Collection,
 }
 
 pub async fn connect() -> Arc<DataSources> {
@@ -23,6 +26,6 @@ pub async fn connect() -> Arc<DataSources> {
         .database(&mongo_db_name);
 
     Arc::new(DataSources {
-        samples: db.collection("samples"),
+        {{name}}s: db.collection("{{name}}s"),
     })
 }

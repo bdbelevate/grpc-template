@@ -1,3 +1,6 @@
+{% assign name = crate_name | remove: "_service" %}
+{% assign pascal = name | pascal_case %}
+
 use serde::Deserialize;
 use std::fs::File;
 use std::time::SystemTime;
@@ -5,7 +8,7 @@ use std::time::SystemTime;
 use crate::{{crate_name}}::Timestamp;
 
 #[derive(Debug, Deserialize)]
-struct Sample {
+struct {{pascal}} {
     id: String,
     name: String,
     description: Option<String>,
@@ -20,15 +23,15 @@ fn now() -> u64 {
 }
 
 #[allow(dead_code)]
-pub fn load_items() -> Vec<crate::{{crate_name}}::Sample> {
+pub fn load_items() -> Vec<crate::{{crate_name}}::{{pascal}}> {
     let file = File::open("examples/data/samples.json").expect("failed to open data file");
 
-    let decoded: Vec<Sample> =
+    let decoded: Vec<{{pascal}}> =
         serde_json::from_reader(&file).expect("failed to deserialize features");
 
     decoded
         .into_iter()
-        .map(|item| crate::{{crate_name}}::Sample {
+        .map(|item| crate::{{crate_name}}::{{pascal}} {
             id: "None".to_string(),
             name: item.name,
             description: item.description.unwrap_or("".to_string()),

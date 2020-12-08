@@ -1,7 +1,9 @@
+{% assign name = crate_name | remove: "_service" %}
+{% assign pascal = name | pascal_case %}
 use std::time::SystemTime;
 
 pub mod error;
-pub mod samples;
+pub mod items;
 
 use crate::{{crate_name}}::Timestamp;
 

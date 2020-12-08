@@ -1,3 +1,7 @@
+{% assign name = crate_name | remove: "_service" %}
+{% assign plural_name = name | append: "s" %}
+{% assign pascal = name | pascal_case %}
+
 use dotenv::dotenv;
 use log::{debug, warn};
 use std::sync::Arc;
@@ -11,72 +15,72 @@ mod data;
 mod db;
 
 use crate::db::DataSources;
-use {{crate_name}}::sample_service_server::{SampleService, SampleServiceServer};
+use {{crate_name}}::{{name}}_service_server::{{{pascal}}Service, {{pascal}}ServiceServer};
 use {{crate_name}}::{
-    DeleteSampleRequest, GetSampleRequest,
-    ListSamplesRequest, Sample, UpdateSampleRequest
+    Delete{{pascal}}Request, Get{{pascal}}Request,
+    List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request
 };
 
-pub mod {{crate_name}} {
-    tonic::include_proto!("cosm.{{crate_name}}");
+pub mod {{name}} {
+    tonic::include_proto!("cosm.{{name}}");
 }
 
 #[derive(Clone)]
-pub struct Samples {
+pub struct {{pascal}}s {
     data_sources: Arc<DataSources>,
 }
 
 #[tonic::async_trait]
-impl SampleService for Samples {
-    async fn create_sample(
+impl {{pascal}}Service for {{pascal}}s {
+    async fn create_{{name}}(
         &self,
-        request: Request<Sample>,
-    ) -> Result<Response<Sample>, tonic::Status> {
-        let sample = request.into_inner();
-        api::samples::create_one(&self.data_sources.samples, sample).await
+        request: Request<{{pascal}}>,
+    ) -> Result<Response<{{pascal}}>, tonic::Status> {
+        let item = request.into_inner();
+        api::items::create_one(&self.data_sources.{{plural_name}}, item).await
     }
 
-    async fn get_sample(
+    async fn get_{{name}}(
         &self,
-        request: Request<GetSampleRequest>,
-    ) -> Result<tonic::Response<Sample>, tonic::Status> {
-        warn!("GetSample = {:?}", request);
+        request: Request<Get{{pascal}}Request>,
+    ) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
+        warn!("Get{{pascal}} = {:?}", request);
 
-        api::samples::get_by_id(&self.data_sources.samples, &request.get_ref().id).await
+        api::items::get_by_id(&self.data_sources.{{plural_name}}, &request.get_ref().id).await
     }
 
-    type ListSamplesStream = mpsc::Receiver<Result<Sample, Status>>;
-    async fn list_samples(
+    type List{{pascal}}sStream = mpsc::Receiver<Result<{{pascal}}, Status>>;
+    async fn list_{{plural_name}}(
         &self,
-        request: Request<ListSamplesRequest>,
-    ) -> Result<tonic::Response<Self::ListSamplesStream>, tonic::Status> {
-        debug!("ListSamples = {:?}", request);
+        request: Request<List{{pascal}}sRequest>,
+    ) -> Result<tonic::Response<Self::List{{pascal}}sStream>, tonic::Status> {
+        debug!("List{{pascal}}s = {:?}", request);
 
         let request = request.get_ref();
         if request.limit > 100 {
             return Err(Status::invalid_argument("Maximum number of items is 100"));
         }
 
-        return Ok(api::samples::stream(&self.data_sources.samples, request).await);
+        return Ok(api::items::stream(&self.data_sources.{{plural_name}}, request).await);
     }
 
-    async fn update_sample(
+    async fn update_{{name}}(
         &self,
-        request: tonic::Request<UpdateSampleRequest>,
-    ) -> Result<tonic::Response<Sample>, tonic::Status> {
-        warn!("UpdateSample = {:?}", request);
+        request: tonic::Request<Update{{pascal}}Request>,
+    ) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
+        warn!("Update{{pascal}} = {:?}", request);
 
         let request = request.get_ref();
-        api::samples::update_one(&self.data_sources.samples, request).await
+        api::items::update_one(&self.data_sources.{{plural_name}}, request).await
     }
 
-    async fn delete_sample(
+    async fn delete_{{name}}(
         &self,
-        request: tonic::Request<DeleteSampleRequest>,
+        request: tonic::Request<Delete{{pascal}}Request>,
     ) -> Result<tonic::Response<()>, tonic::Status> {
-        warn!("DeleteSample = {:?}", request);
+        warn!("Delete{{pascal}} = {:?}", request);
 
-        api::samples::delete_by_id(&self.data_sources.samples, &request.get_ref().id)
+        api::items::delete_by_id(&self.data_sources.{{plural_name}}, &request.get_ref().id)
             .await
     }
 }
@@ -87,12 +91,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::init();
     let addr = "0.0.0.0:10000".parse().unwrap();
 
-    warn!("SampleService listening on: {}", addr);
-    let samples = Samples {
+    warn!("{{pascal}}Service listening on: {}", addr);
+    let {{plural_name}} = {{pascal}}s {
         data_sources: db::connect().await,
     };
 
-    let svc = SampleServiceServer::new(samples);
+    let svc = {{pascal}}ServiceServer::new({{plural_name}});
 
     Server::builder().add_service(svc).serve(addr).await?;
 

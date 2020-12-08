@@ -1,3 +1,5 @@
+{% assign name = crate_name | remove: "_service" %}
+{% assign pascal = name | pascal_case %}
 use futures::future;
 use futures::stream::StreamExt;
 use log::{debug, warn};
@@ -11,12 +13,12 @@ use tonic::{Response, Status};
 
 use crate::api::get_timestamp;
 use crate::db::id::ID;
-use crate::{{crate_name}}::{ListSamplesRequest, Sample, UpdateSampleRequest};
+use crate::{{crate_name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
 
 pub async fn create_one(
     collection: &Collection,
-    mut item: Sample,
-) -> Result<Response<Sample>, tonic::Status> {
+    mut item: {{pascal}},
+) -> Result<Response<{{pascal}}>, tonic::Status> {
     if item.name == "" {
         return Err(Status::invalid_argument("name_required"));
     }
@@ -42,7 +44,7 @@ pub async fn create_one(
 pub async fn get_by_id(
     collection: &Collection,
     id: &str,
-) -> Result<tonic::Response<Sample>, tonic::Status> {
+) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
     let id = ID::from_string(id)?;
     let filter = doc! { "_id": id.to_bson() };
     let some_item = collection.find_one(filter, None).await.map_err(|_| {
@@ -53,7 +55,7 @@ pub async fn get_by_id(
     match some_item {
         Some(doc) => {
             println!("item: {:?}", doc);
-            let item: Sample = from_bson(Bson::Document(doc.to_owned()))
+            let item: {{pascal}} = from_bson(Bson::Document(doc.to_owned()))
                 .map_err(|e| Status::internal(e.to_string()))?;
             Ok(Response::new(item))
         }
@@ -63,8 +65,8 @@ pub async fn get_by_id(
 
 pub async fn stream(
     collection: &Collection,
-    request: &ListSamplesRequest,
-) -> Response<mpsc::Receiver<Result<Sample, Status>>> {
+    request: &List{{pascal}}sRequest,
+) -> Response<mpsc::Receiver<Result<{{pascal}}, Status>>> {
     let (mut tx, rx) = mpsc::channel(100);
 
     let options = FindOptions::builder()
@@ -78,7 +80,7 @@ pub async fn stream(
         cursor
             .then(|c| match c {
                 Ok(doc) => {
-                    let item_result: Option<Sample> =
+                    let item_result: Option<{{pascal}}> =
                         from_bson(Bson::Document(doc.to_owned()))
                             .map_or_else(|_| None, |x| Some(x));
                     future::ready(item_result)
@@ -103,8 +105,8 @@ pub async fn stream(
 
 pub async fn update_one(
     collection: &Collection,
-    request: &UpdateSampleRequest,
-) -> Result<tonic::Response<Sample>, tonic::Status> {
+    request: &Update{{pascal}}Request,
+) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
     let id = ID::from_string(&request.id)?;
     let query = doc! { "_id": id.to_bson() };
 

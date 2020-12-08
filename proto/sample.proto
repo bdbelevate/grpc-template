@@ -1,4 +1,4 @@
-{% assign name = crate_name | remove: "service" %}
+{% assign name = crate_name | remove: "_service" %}
 {% assign pascal = name | pascal_case %}
 syntax = "proto3";
 package cosm.{{name}};
