@@ -21,10 +21,8 @@ Answer the prompts and voila! you have a new project.
 - Install [Rust](https://www.rust-lang.org/tools/install)
 - Run `cargo run` to build and run service
 
-### Install Docker and Docker Compose (Optional)
-
-- [Docker](https://docs.docker.com/engine/install/)
-- [docker-compose](https://docs.docker.com/compose/install/)
+## Install Garden
+See garden.io
 
 ## VSCode
 
