@@ -15,7 +15,7 @@ mod data;
 mod db;
 
 use crate::db::DataSources;
-use {{crate_name}}::{{name}}_service_server::{{{pascal}}Service, {{pascal}}ServiceServer};
+use {{crate_name}}::{{name}}_service_server::{{pascal}}Service, {{pascal}}ServiceServer};
 use {{crate_name}}::{
     Delete{{pascal}}Request, Get{{pascal}}Request,
     List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request
