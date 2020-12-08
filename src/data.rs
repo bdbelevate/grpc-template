@@ -33,7 +33,7 @@ pub fn load_items() -> Vec<crate::{{crate_name}}::Sample> {
             name: item.name,
             description: item.description.unwrap_or("".to_string()),
             created_at: Some(Timestamp {
-                seconds: org.created_at.unwrap_or(now() as i64),
+                seconds: item.created_at.unwrap_or(now() as i64),
                 nanos: 0,
             }),
         })

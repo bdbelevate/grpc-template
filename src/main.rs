@@ -11,7 +11,7 @@ mod data;
 mod db;
 
 use crate::db::DataSources;
-use {{crate_name}}::{{crate_name}}_service_server::{SampleService, SampleServiceServer};
+use {{crate_name}}::sample_service_server::{SampleService, SampleServiceServer};
 use {{crate_name}}::{
     DeleteSampleRequest, GetSampleRequest,
     ListSamplesRequest, Sample, UpdateSampleRequest

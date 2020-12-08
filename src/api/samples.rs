@@ -11,7 +11,7 @@ use tonic::{Response, Status};
 
 use crate::api::get_timestamp;
 use crate::db::id::ID;
-use crate::{{crate_name}}::{ListSampleRequest, Sample, UpdateSampleRequest};
+use crate::{{crate_name}}::{ListSamplesRequest, Sample, UpdateSampleRequest};
 
 pub async fn create_one(
     collection: &Collection,
