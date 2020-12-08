@@ -1,5 +1,7 @@
+{{ assign content_type = cargo_name | capitalize | remove "_"}}
 syntax = "proto3";
 
+Content Type: "{{ content_type }}"
 package cosm.{{crate_name}};
 
 import "google/protobuf/empty.proto";
@@ -20,7 +22,7 @@ message Timestamp {
 
 // service definitions
 service SampleService {
-    rpc CreateSample(Sample) returns (Sample);
+    rpc Create{{crate_name | capitalize | remove "_"}}(Sample) returns (Sample);
     rpc GetSample(GetSampleRequest) returns (Sample);
     rpc ListSamples(ListSamplesRequest) returns (stream Sample);
     rpc UpdateSample(UpdateSampleRequest) returns (Sample);
