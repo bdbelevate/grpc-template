@@ -1,8 +1,5 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
-
 use prost_build::Config;
-
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 fn main() {
     let mut config = Config::new();
     // config.compile_well_known_types();

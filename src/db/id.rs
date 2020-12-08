@@ -123,7 +123,7 @@ where
     deserializer.deserialize_any(IDVisitor)
 }
 
-fn with_bson(value: &Bson) -> String {
+pub fn with_bson(value: &Bson) -> String {
     match value.into() {
         Bson::String(s) => s,
         Bson::ObjectId(o) => format!("$oid:{}", o.to_hex()),

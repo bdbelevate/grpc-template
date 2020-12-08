@@ -1,11 +1,7 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign plural_name = name | append: "s" %}
-{% assign pascal = name | pascal_case %}
-
 use dotenv::dotenv;
 use log::{debug, warn};
 use std::sync::Arc;
-
+{% assign name = crate_name | remove: "_service" %}{% assign plural_name = name | append: "s" %}{% assign pascal = name | pascal_case %}
 use tokio::sync::mpsc;
 use tonic::transport::Server;
 use tonic::{Request, Response, Status};

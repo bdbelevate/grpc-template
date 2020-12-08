@@ -1,10 +1,7 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
-
 use serde::Deserialize;
 use std::fs::File;
 use std::time::SystemTime;
-
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 use crate::{{name}}::Timestamp;
 
 #[derive(Debug, Deserialize)]

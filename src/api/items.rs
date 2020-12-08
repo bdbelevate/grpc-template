@@ -1,5 +1,3 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
 use futures::future;
 use futures::stream::StreamExt;
 use log::{debug, warn};
@@ -10,9 +8,9 @@ use mongodb::{
 };
 use tokio::sync::mpsc;
 use tonic::{Response, Status};
-
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 use crate::api::get_timestamp;
-use crate::db::id::ID;
+use crate::db::id::{with_bson, ID};
 use crate::{{name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
 
 pub async fn create_one(
@@ -34,7 +32,7 @@ pub async fn create_one(
             .await
             .map_err(|e| Status::internal(e.to_string()))?;
         // convert id to a string
-        item.id = insert_result.inserted_id.as_object_id().unwrap().to_hex();
+        item.id = with_bson(&insert_result.inserted_id);
         Ok(Response::new(item))
     } else {
         Err(Status::internal("INTERNAL ERROR"))

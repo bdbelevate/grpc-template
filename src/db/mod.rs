@@ -1,12 +1,9 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
-
 use log::warn;
 use mongodb::Client;
 use mongodb::Collection;
 use std::env;
 use std::sync::Arc;
-
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 pub mod id;
 
 #[derive(Clone)]

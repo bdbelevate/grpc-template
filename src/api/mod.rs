@@ -1,7 +1,5 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
 use std::time::SystemTime;
-
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 pub mod error;
 pub mod items;
 

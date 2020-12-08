@@ -1,6 +1,5 @@
-{% assign name = crate_name | remove: "_service" %}
-{% assign pascal = name | pascal_case %}
 syntax = "proto3";
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
 package cosm.{{name}};
 
 import "google/protobuf/empty.proto";
