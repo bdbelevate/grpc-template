@@ -1,6 +1,5 @@
+{% assign pascal = crate_name | pascal_case %}
 syntax = "proto3";
-
-Content Type: "{{crate_name | pascal_case}}"
 package cosm.{{crate_name}};
 
 import "google/protobuf/empty.proto";
@@ -21,7 +20,7 @@ message Timestamp {
 
 // service definitions
 service SampleService {
-    rpc Create{{crate_name | pascal_case}}(Sample) returns (Sample);
+    rpc Create{{pascal}}({{pascal}}) returns ({{pascal}});
     rpc GetSample(GetSampleRequest) returns (Sample);
     rpc ListSamples(ListSamplesRequest) returns (stream Sample);
     rpc UpdateSample(UpdateSampleRequest) returns (Sample);
