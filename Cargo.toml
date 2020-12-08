@@ -1,0 +1,29 @@
+[package]
+name = "{{project-name}}"
+version = "0.1.0"
+authors = ["{{authors}}"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-stream = "0.3"
+dotenv = "0.15"
+env_logger = "0.8"
+futures = "0.3"
+futures-core = "0.3"
+futures-util = "0.3"
+log = "0.4"
+mongodb = "1.1"
+prost = { version = "0.6", features = ["prost-derive"] }
+prost-types = "0.6"
+rand = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "0.2", features = ["macros", "sync", "stream", "time"] }
+tonic = "0.3"
+uuid = { version = "0.8", features = ["serde", "v4"] }
+
+[build-dependencies]
+prost-build = { version = "0.6" }
+tonic-build = "0.3"

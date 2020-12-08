@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package cosm.{{crate_name}};
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+
+message Timestamp {
+    // Represents seconds of UTC time since Unix epoch
+    // 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
+    // 9999-12-31T23:59:59Z inclusive.
+    int64 seconds = 1;
+
+    // Non-negative fractions of a second at nanosecond resolution. Negative
+    // second values with fractions must still have non-negative nanos values
+    // that count forward in time. Must be from 0 to 999,999,999
+    // inclusive.
+    int32 nanos = 2;
+}
+
+// service definitions
+service SampleService {
+    rpc CreateSample(Sample) returns (Sample);
+    rpc GetSample(GetSampleRequest) returns (Sample);
+    rpc ListSamples(ListSamplesRequest) returns (stream Sample);
+    rpc UpdateSample(UpdateSampleRequest) returns (Sample);
+    rpc DeleteSample(DeleteSampleRequest) returns (google.protobuf.Empty);
+}
+
+// organization request messages
+message GetSampleRequest {
+    string id = 1;
+}
+
+message ListSamplesRequest {
+    enum OrderBy {
+        DEFAULT = 0;
+        NAME = 1;
+        CREATED_AT = 2;
+    }
+    OrderBy order_by = 1;
+    int32 start = 2;
+    int32 limit = 3;
+}
+
+message UpdateSampleRequest {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+
+    google.protobuf.FieldMask mask = 4;
+}
+
+message DeleteSampleRequest {
+    string id = 1;
+}
+
+// response messages
+message Sample  {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+
+    Timestamp created_at = 4;
+}

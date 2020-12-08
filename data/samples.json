@@ -1,0 +1,21 @@
+[
+    {
+        "id": "1",
+        "name": "Cosm",
+        "description": "Cosm is a global technology company that enables people to experience entertainment in a new way, across three primary markets: Sports and Entertainment, Science and Education and Parks and Attractions."
+    },
+    {
+        "id": "2",
+        "name": "Evans and Sutherland",
+        "description": "Evans & Sutherland, a Cosm company, is the world's first computer graphics company and has developed advanced computer graphics technologies for over fifty years. Focusing primarily on digital planetariums and digital cinemas worldwide, E&S offers Digistar, the world's leading digital planetarium system, fulldome programs and production services, giant screen films formatted for fulldome theaters, premium-quality projection domes and theater design services."
+    },
+    {
+        "id": "3",
+        "name": "Spitz",
+        "description": "Spitz, a Cosm company, is the world's leading provider of projection domes and complex curved attraction screens, as seen at the world's most visited theme parks, planetariums, and dome cinemas."
+    },
+    {
+        "id": "4",
+        "name": "Livelike VR"
+    }
+]

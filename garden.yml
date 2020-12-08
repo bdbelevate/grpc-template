@@ -1,0 +1,21 @@
+kind: Module
+description: The {{project-name}} service source image
+name: {{project-name}}
+type: container
+hotReload:
+  sync:
+    - source: src
+      target: /app/src
+    - source: proto
+      target: /app/proto
+exclude: ["mongo", "target", ".trigger", ".garden"]
+services:
+  - name: {{project-name}}
+    env:
+      MONGO_URL: mongodb://{{project-name}}-db:27017/
+      MONGO_DB_NAME: {{project-name}}
+      RUST_LOG: debug
+    ports:
+      - name: grpc
+        protocol: TCP
+        containerPort: 10000
