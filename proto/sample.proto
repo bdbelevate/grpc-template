@@ -1,4 +1,4 @@
-{% assign words = cargo_name | split: "_" %}{% capture content_type %}{% for word in words %}{{ word | captialize }}{% endcapture %}
+{% assign words = cargo_name | split: "_" %}{% capture content_type %}{% for word in words %}{{ word | capitalize }}{% endcapture %}
 syntax = "proto3";
 
 Content Type: "{{content_type}}"
