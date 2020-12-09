@@ -22,7 +22,7 @@ Note: It will rename things and remove the word "service". So if you want to cre
 
 Run the cargo generate above. Then go and edit (and/or rename) the proto/sample.proto. Keep in mind that if you rename it you will need to change the build.rs accordingly.
 
-If you add fields, you'll likely need to change the api/items.rs to update the update_one command.
+If you add fields, you'll likely need to change the api/items.rs to update the update_one command. You will also likely want to remove or edit the src/data.rs.
 
 ## Getting Started
 
