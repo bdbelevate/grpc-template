@@ -1,6 +1,6 @@
 kind: Module
 description: The {{project-name}} service source image
-name: {{project-name}}
+name: { { project-name } }
 type: container
 hotReload:
   sync:
@@ -11,9 +11,18 @@ hotReload:
 exclude: ["mongo", "target", ".trigger", ".garden"]
 services:
   - name: {{project-name}}
+    annotations:
+      getambassador.io/config: |
+        ---
+        apiVersion: ambassador/v2
+        kind: Mapping
+        name: {{project-name}}-mapping
+        host: ${local.username}.{{project-name}}.${var.defaultHostname}
+        prefix: /
+        service: {{project-name}}.cosm-services-${environment.namespace}:4000
     env:
       MONGO_URL: mongodb://{{project-name}}-db:27017/
-      MONGO_DB_NAME: {{project-name}}
+      MONGO_DB_NAME: { { project-name } }
       RUST_LOG: debug
     ports:
       - name: grpc
