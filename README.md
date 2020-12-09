@@ -40,3 +40,13 @@ See garden.io
 - Native Debug
 - Rust
 - rust-analyzer
+
+## Bloom RPC
+
+Testing the gRPC calls is best done via (BloomRPC)[https://github.com/uw-labs/bloomrpc]. More info on their site but easiest way to install it is via brew.
+
+```bash
+brew cask install bloomrpc
+```
+
+Once it's installed you can open the proto file to test the endpoints.
