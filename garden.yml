@@ -1,36 +1,5 @@
 {% assign name = crate_name | remove: "_service" %}{% assign plural_name = name | append: "s" %}{% assign pascal = name | pascal_case %}
 kind: Module
-description: mongodb persistent volume
-type: persistentvolumeclaim
-name: {{project-name}}-db-storage
-include: []
-spec:
-  accessModes: ${var.volumeAccessModes}
-  storageClassName: standard
-  resources:
-    requests:
-      storage: 1Gi
----
-kind: Module
-description: mongodb server
-type: container
-name: {{project-name}}-db
-image: mongo:4.0
-include: []
-services:
-  - name: {{project-name}}-db
-    dependencies: ["{{project-name}}-db-storage"]
-    replicas: 1
-    volumes:
-      - name: {{project-name}}-db-storage
-        module: {{project-name}}-db-storage
-        containerPath: /data/db
-    ports:
-      - name: mongo
-        protocol: TCP
-        containerPort: 27017
----
-kind: Module
 description: The {{project-name}} service source image
 name: {{ project-name }}
 type: container
@@ -43,7 +12,9 @@ hotReload:
 exclude: ["mongo", "target", ".trigger", ".garden"]
 services:
   - name: {{project-name}}
-    dependencies: ["{{project-name}}-db"]
+    dependencies:
+      - cosm-service-mongo
+      - ambassador
     annotations:
       getambassador.io/config: |
         ---
@@ -55,7 +26,7 @@ services:
         rewrite: /cosm.{{name | downcase}}.{{pascal}}/
         service: {{project-name}}.cosm-services-${environment.namespace}:10000
     env:
-      MONGO_URL: mongodb://{{project-name}}-db:27017/
+      MONGO_URL: mongodb://cosm-service-mongo:27017/
       MONGO_DB_NAME: {{ project-name }}
       RUST_LOG: debug
     ports:
