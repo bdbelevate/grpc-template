@@ -22,8 +22,8 @@ services:
         kind: Mapping
         name: {{project-name}}-mapping
         grpc: True
-        prefix: /cosm.{{name | downcase}}.{{pascal}}/
-        rewrite: /cosm.{{name | downcase}}.{{pascal}}/
+        prefix: /cosm.{{name | downcase}}.{{pascal}}Service/
+        rewrite: /cosm.{{name | downcase}}.{{pascal}}Service/
         service: {{project-name}}.cosm-services-${environment.namespace}:10000
     env:
       MONGO_URL: mongodb://cosm-service-mongo:27017/
