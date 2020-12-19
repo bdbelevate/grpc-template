@@ -41,6 +41,7 @@ message List{{pascal}}sRequest {
     OrderBy order_by = 1;
     int32 start = 2;
     int32 limit = 3;
+    repeated string ignored_ids = 4;
 }
 
 message Update{{pascal}}Request {

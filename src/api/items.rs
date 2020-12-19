@@ -72,7 +72,19 @@ pub async fn stream(
         .limit(Some(request.limit as i64))
         .build();
 
-    let cursor_result = collection.find(doc! {}, options).await;
+
+    let ignored_ids = request.ignored_ids.iter().fold(vec![], |mut acc, id| {
+        let id = ID::from_string(id);
+        if let Ok(id) = id {
+            acc.push(id.to_bson());
+        }
+        acc
+    });
+    let query = doc! {
+        "_id": { "$nin": ignored_ids },
+    };
+
+    let cursor_result = collection.find(query, options).await;
 
     if let Ok(cursor) = cursor_result {
         cursor
