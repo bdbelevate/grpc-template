@@ -11,7 +11,7 @@ cargo install --git https://github.com/ashleygwilliams/cargo-generate
 Then to create a new project:
 
 ```sh
-cargo generate --git https://github.com/briandeboer/mongodb-service-template
+cargo generate --git https://github.com/bdbelevate/grpc-template
 ```
 
 Answer the prompts and voila! you have a new project.
