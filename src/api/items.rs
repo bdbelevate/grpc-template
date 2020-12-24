@@ -84,7 +84,7 @@ pub async fn stream(
     };
 
     let filtered_types: Vec<i32> = request
-        .{{name}}_type
+        .{{name}}_types
         .iter()
         .map(|f| f.clone())
         .filter(|f| *f >= 0)

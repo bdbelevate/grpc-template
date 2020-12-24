@@ -44,6 +44,8 @@ message List{{pascal}}sRequest {
     repeated string ignored_ids = 4;
 
     string search_term = 5;
+
+    repeated {{pascal}}Type {{name}}_types = 6;
 }
 
 message Update{{pascal}}Request {
