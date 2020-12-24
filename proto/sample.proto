@@ -51,7 +51,7 @@ message Update{{pascal}}Request {
     string name = 2;
     string description = 3;
 
-    {{pascal}}Type {{crate_name}}_type = 4;
+    {{pascal}}Type {{name}}_type = 4;
 
     google.protobuf.FieldMask mask = 5;
 }
@@ -73,7 +73,7 @@ message {{pascal}}  {
     string name = 2;
     string description = 3;
 
-    {{pascal}}Type {{crate_name}}_type = 4;
+    {{pascal}}Type {{name}}_type = 4;
 
     Timestamp created_at = 5;
 }

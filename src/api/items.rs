@@ -84,13 +84,13 @@ pub async fn stream(
     };
 
     let filtered_types: Vec<i32> = request
-        .{{crate_name}}_type
+        .{{name}}_type
         .iter()
         .map(|f| f.clone())
         .filter(|f| *f >= 0)
         .collect();
     if filtered_types.len() > 0 {
-        query.insert("{{crate_name}}_type", doc! { "$in": filtered_types });
+        query.insert("{{name}}_type", doc! { "$in": filtered_types });
     }
 
     if request.search_term.len() >= 2 {
@@ -144,7 +144,7 @@ pub async fn update_one(
                 match path.as_str() {
                     "name" => doc.insert("name", request.name.to_owned()),
                     "description" => doc.insert("description", request.description.to_owned()),
-                    "{{crate_name}}_type" => doc.insert("{{crate_name}}_type", request.{{crate_name}}_type.to_owned()),
+                    "{{name}}_type" => doc.insert("{{name}}_type", request.{{name}}_type.to_owned()),
                     _ => {
                         warn!("Path: {} is not supported", path);
                         None
