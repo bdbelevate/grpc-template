@@ -72,7 +72,6 @@ pub async fn stream(
         .limit(Some(request.limit as i64))
         .build();
 
-
     let ignored_ids = request.ignored_ids.iter().fold(vec![], |mut acc, id| {
         let id = ID::from_string(id);
         if let Ok(id) = id {
@@ -83,6 +82,24 @@ pub async fn stream(
     let query = doc! {
         "_id": { "$nin": ignored_ids },
     };
+
+    let filtered_types: Vec<i32> = request
+        .{{crate_name}}_type
+        .iter()
+        .map(|f| f.clone())
+        .filter(|f| *f >= 0)
+        .collect();
+    if filtered_types.len() > 0 {
+        query.insert("{{crate_name}}_type", doc! { "$in": filtered_types });
+    }
+
+    if request.search_term.len() >= 2 {
+        let search_doc: Vec<Document> = vec![
+            doc! { "name": { "$regex": format!("{}", request.search_term), "$options": "i" } },
+            doc! { "description": { "$regex": format!("{}", request.search_term), "$options": "i" } },
+        ];
+        query.insert("$or", search_doc);
+    }
 
     let cursor_result = collection.find(query, options).await;
 
@@ -127,6 +144,7 @@ pub async fn update_one(
                 match path.as_str() {
                     "name" => doc.insert("name", request.name.to_owned()),
                     "description" => doc.insert("description", request.description.to_owned()),
+                    "{{crate_name}}_type" => doc.insert("{{crate_name}}_type", request.{{crate_name}}_type.to_owned()),
                     _ => {
                         warn!("Path: {} is not supported", path);
                         None

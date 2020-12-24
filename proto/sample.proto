@@ -42,6 +42,8 @@ message List{{pascal}}sRequest {
     int32 start = 2;
     int32 limit = 3;
     repeated string ignored_ids = 4;
+
+    string search_term = 5;
 }
 
 message Update{{pascal}}Request {
@@ -49,11 +51,20 @@ message Update{{pascal}}Request {
     string name = 2;
     string description = 3;
 
-    google.protobuf.FieldMask mask = 4;
+    {{pascal}}Type {{crate_name}}_type = 4;
+
+    google.protobuf.FieldMask mask = 5;
 }
 
 message Delete{{pascal}}Request {
     string id = 1;
+}
+
+enum {{pascal}}Type {
+    NONE = 0;
+    TYPE_1 = 1;
+    TYPE_2 = 2;
+    TYPE_3 = 3;
 }
 
 // response messages
@@ -62,5 +73,7 @@ message {{pascal}}  {
     string name = 2;
     string description = 3;
 
-    Timestamp created_at = 4;
+    {{pascal}}Type {{crate_name}}_type = 4;
+
+    Timestamp created_at = 5;
 }
