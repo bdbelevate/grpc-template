@@ -2,7 +2,7 @@ use futures::future;
 use futures::stream::StreamExt;
 use log::{debug, warn};
 use mongodb::{
-    bson::{doc, from_bson, to_bson, Bson},
+    bson::{doc, from_bson, to_bson, Bson, Document},
     options::FindOptions,
     Collection,
 };
