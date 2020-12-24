@@ -7,7 +7,6 @@ use tonic::transport::Server;
 use tonic::{Request, Response, Status};
 
 mod api;
-mod data;
 mod db;
 
 use crate::db::DataSources;
