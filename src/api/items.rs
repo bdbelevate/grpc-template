@@ -79,7 +79,7 @@ pub async fn stream(
         }
         acc
     });
-    let query = doc! {
+    let mut query = doc! {
         "_id": { "$nin": ignored_ids },
     };
 
