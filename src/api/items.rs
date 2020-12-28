@@ -82,6 +82,9 @@ pub async fn stream(
     let mut query = doc! {
         "_id": { "$nin": ignored_ids },
     };
+    if request.project_ids.len() > 0 {
+        query.insert("project_ids", doc! { "$in": request.project_ids.clone() });
+    }
 
     let filtered_types: Vec<i32> = request
         .{{name}}_types
@@ -144,6 +147,7 @@ pub async fn update_one(
                 match path.as_str() {
                     "name" => doc.insert("name", request.name.to_owned()),
                     "description" => doc.insert("description", request.description.to_owned()),
+                    "project_ids" => doc.insert("project_ids", request.project_ids.to_owned()),
                     "{{name}}_type" => doc.insert("{{name}}_type", request.{{name}}_type.to_owned()),
                     _ => {
                         warn!("Path: {} is not supported", path);

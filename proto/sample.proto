@@ -46,6 +46,7 @@ message List{{pascal}}sRequest {
     string search_term = 5;
 
     repeated {{pascal}}Type {{name}}_types = 6;
+    repeated string project_ids = 7;
 }
 
 message Update{{pascal}}Request {
@@ -55,7 +56,8 @@ message Update{{pascal}}Request {
 
     {{pascal}}Type {{name}}_type = 4;
 
-    google.protobuf.FieldMask mask = 5;
+    repeated string project_ids = 5;
+    google.protobuf.FieldMask mask = 6;
 }
 
 message Delete{{pascal}}Request {
@@ -76,6 +78,7 @@ message {{pascal}}  {
     string description = 3;
 
     {{pascal}}Type {{name}}_type = 4;
-
-    Timestamp created_at = 5;
+    repeated string project_ids = 5;
+    
+    Timestamp created_at = 6;
 }
