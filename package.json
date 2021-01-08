@@ -1,0 +1,28 @@
+{
+  "name": "{{ crate_name }}",
+  "version": "1.0.0",
+  "description": "This is used to manage scripts and other tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "cargo test && cargo fmt -- --check",
+    "run": "cargo run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cosm-eng/rust-{{ crate_name }}.git"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "~11.0.0",
+    "@commitlint/config-conventional": "~11.0.0",
+    "husky": "~4.3.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "author": "Brian DeBoer",
+  "license": "ISC",
+  "homepage": "https://github.com/cosm-eng/rust-{{ crate_name }}#readme"
+}

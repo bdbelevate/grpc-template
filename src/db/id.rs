@@ -18,15 +18,15 @@ pub enum ID {
 impl ID {
     pub fn from_string<S: Into<String>>(value: S) -> Result<Self, ServiceError> {
         let s: String = value.into();
-        if s.starts_with("$oid:") {
-            match ObjectId::with_string(&s[5..]) {
+        if let Some(stripped) = s.strip_prefix("$oid:") {
+            match ObjectId::with_string(stripped) {
                 Ok(oid) => Ok(ID::ObjectId(oid)),
                 Err(_) => Err(ServiceError::ParseError(
                     "Unable to parse object id".to_string(),
                 )),
             }
-        } else if s.starts_with("$i:") {
-            match s[3..].parse::<i64>() {
+        } else if let Some(stripped) = s.strip_prefix("$i:") {
+            match stripped.parse::<i64>() {
                 Ok(i) => Ok(ID::Int64(i)),
                 Err(_) => Err(ServiceError::ParseError(
                     "Unable to parse integer id".to_string(),
@@ -41,7 +41,7 @@ impl ID {
         match self {
             ID::ObjectId(o) => Bson::ObjectId(o.clone()),
             ID::String(s) => Bson::String(s.to_string()),
-            ID::Int64(i) => Bson::Int64(i.clone()),
+            ID::Int64(i) => Bson::Int64(*i),
         }
     }
 }
@@ -50,8 +50,8 @@ pub fn serialize<S>(s: &str, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
-    if s.starts_with("$oid:") {
-        match ObjectId::with_string(&s[5..]) {
+    if let Some(stripped) = s.strip_prefix("$oid:") {
+        match ObjectId::with_string(stripped) {
             Ok(oid) => {
                 let mut map = serializer.serialize_map(Some(1))?;
                 map.serialize_entry("$oid", &oid.to_string())?;
@@ -59,8 +59,8 @@ where
             }
             Err(_) => serializer.serialize_str(s),
         }
-    } else if s.starts_with("$i:") {
-        match s[3..].parse::<i64>() {
+    } else if let Some(stripped) = s.strip_prefix("$i:") {
+        match stripped.parse::<i64>() {
             Ok(i) => serializer.serialize_i64(i),
             Err(_) => serializer.serialize_str(s),
         }

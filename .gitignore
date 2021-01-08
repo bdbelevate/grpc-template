@@ -1,3 +1,5 @@
 target
 .garden
 .cargo-ok
+node_modules
+package-lock.json

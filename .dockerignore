@@ -1,3 +1,4 @@
 target
 mongo
 .garden
+node_modules

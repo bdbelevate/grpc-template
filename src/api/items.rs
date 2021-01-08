@@ -1,6 +1,6 @@
 use futures::future;
 use futures::stream::StreamExt;
-use log::{debug, warn};
+use log::{debug, error, warn};
 use mongodb::{
     bson::{doc, from_bson, to_bson, Bson, Document},
     options::FindOptions,
@@ -46,14 +46,14 @@ pub async fn get_by_id(
     let id = ID::from_string(id)?;
     let filter = doc! { "_id": id.to_bson() };
     let some_item = collection.find_one(filter, None).await.map_err(|_| {
-        println!("an error occurred");
+        error!("an error occurred");
         Status::internal("DATABASE ERROR")
     })?;
 
     match some_item {
         Some(doc) => {
-            println!("item: {:?}", doc);
-            let item: {{pascal}} = from_bson(Bson::Document(doc.to_owned()))
+            debug!("item: {:?}", doc);
+            let item: {{pascal}} = from_bson(Bson::Document(doc))
                 .map_err(|e| Status::internal(e.to_string()))?;
             Ok(Response::new(item))
         }
@@ -82,24 +82,24 @@ pub async fn stream(
     let mut query = doc! {
         "_id": { "$nin": ignored_ids },
     };
-    if request.project_ids.len() > 0 {
+    if !request.project_ids.is_empty() {
         query.insert("project_ids", doc! { "$in": request.project_ids.clone() });
     }
 
     let filtered_types: Vec<i32> = request
         .{{name}}_types
         .iter()
-        .map(|f| f.clone())
+        .copied()
         .filter(|f| *f >= 0)
         .collect();
-    if filtered_types.len() > 0 {
+    if !filtered_types.is_empty() {
         query.insert("{{name}}_type", doc! { "$in": filtered_types });
     }
 
     if request.search_term.len() >= 2 {
         let search_doc: Vec<Document> = vec![
-            doc! { "name": { "$regex": format!("{}", request.search_term), "$options": "i" } },
-            doc! { "description": { "$regex": format!("{}", request.search_term), "$options": "i" } },
+            doc! { "name": { "$regex": &request.search_term, "$options": "i" } },
+            doc! { "description": { "$regex": &request.search_term, "$options": "i" } },
         ];
         query.insert("$or", search_doc);
     }
@@ -111,8 +111,8 @@ pub async fn stream(
             .then(|c| match c {
                 Ok(doc) => {
                     let item_result: Option<{{pascal}}> =
-                        from_bson(Bson::Document(doc.to_owned()))
-                            .map_or_else(|_| None, |x| Some(x));
+                        from_bson(Bson::Document(doc))
+                            .map_or_else(|_| None, Some);
                     future::ready(item_result)
                 }
                 Err(_) => future::ready(None),
@@ -142,7 +142,7 @@ pub async fn update_one(
 
     // update if there's a mask and paths
     if let Some(mask) = &request.mask {
-        if mask.paths.len() > 0 {
+        if !mask.paths.is_empty() {
             let doc = mask.paths.iter().fold(doc! {}, |mut doc, path| {
                 match path.as_str() {
                     "name" => doc.insert("name", request.name.to_owned()),

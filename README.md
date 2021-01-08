@@ -1,4 +1,5 @@
-# Sample Service
+{% assign name = crate_name | remove: "_service" %}{% assign plural_name = name | append: "s" %}{% assign pascal = name | pascal_case %}
+# {{ pascal }} Service
 
 ## Note
 
@@ -17,6 +18,20 @@ cargo generate --git https://github.com/bdbelevate/grpc-template
 Answer the prompts and voila! you have a new project.
 
 Note: It will rename things and remove the word "service". So if you want to create an Events service with types called Event. Then enter the name as "EventService". That will result in a crate named `event-service` and it will have a type of message called Event.
+
+## Install
+
+Install the required node packages which are used for commit hooks, etc...
+
+```bash
+npm install
+```
+
+Download the required crates and build the protobuf rs files.
+
+```bash
+cargo build
+```
 
 ## Usage
 
