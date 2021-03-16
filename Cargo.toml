@@ -6,24 +6,29 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+# NOTE!!! These are not used by garden.
+# You need to change the rust-service-base if you want something different
 [dependencies]
-async-stream = "0.3"
-dotenv = "0.15"
-env_logger = "0.8"
-futures = "0.3"
-futures-core = "0.3"
-futures-util = "0.3"
-log = "0.4"
-mongodb = "1.1"
-prost = { version = "0.6", features = ["prost-derive"] }
-prost-types = "0.6"
-rand = "0.7"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-tokio = { version = "0.2", features = ["macros", "sync", "stream", "time"] }
-tonic = "0.3"
-uuid = { version = "0.8", features = ["serde", "v4"] }
+async-stream = "0.3.0"
+dotenv = "0.15.0"
+env_logger = "0.8.2"
+futures = "0.3.12"
+futures-core = "0.3.12"
+futures-util = "0.3.12"
+log = "0.4.11"
+mongodb = "1.1.1"
+prost = { version = "0.6.1", features = ["prost-derive"] }
+prost-types = "0.6.1"
+rand = "0.7.3"
+rust-utils-lib = { version = "0.1.0", registry = "cosm-cosm-rust" }
+serde = { version = "1.0.118", features = ["derive"] }
+serde_json = "1.0.61"
+strum = "0.20.0"
+strum_macros = "0.20.0"
+tokio = { version = "0.2.24", features = ["macros", "sync", "stream", "time"] }
+tonic = "0.3.1"
+uuid = { version = "0.8.1", features = ["serde", "v4"] }
 
 [build-dependencies]
-prost-build = { version = "0.6" }
-tonic-build = "0.3"
+prost-build = { version = "0.6.1" }
+tonic-build = "0.3.1"

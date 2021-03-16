@@ -1,6 +1,8 @@
 use dotenv::dotenv;
 use log::{debug, warn};
+use std::str::FromStr;
 use std::sync::Arc;
+use strum_macros::EnumString;
 {% assign name = crate_name | remove: "_service" %}{% assign plural_name = name | append: "s" %}{% assign pascal = name | pascal_case %}
 use tokio::sync::mpsc;
 use tonic::transport::Server;
@@ -23,6 +25,12 @@ pub mod {{name}} {
 #[derive(Clone)]
 pub struct {{pascal}}s {
     data_sources: Arc<DataSources>,
+}
+
+#[derive(PartialEq, EnumString, Debug)]
+pub enum UpdateMode {
+    Update,
+    Upsert,
 }
 
 #[tonic::async_trait]
@@ -64,9 +72,22 @@ impl {{pascal}}Service for {{pascal}}s {
         request: tonic::Request<Update{{pascal}}Request>,
     ) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
         warn!("Update{{pascal}} = {:?}", request);
+        let meta_mode = request.metadata().get("mode");
+        let mut mode = UpdateMode::Update;
+
+        // Validate and set mode only when header exists
+        // Needed for backwards compatibility
+        if meta_mode.is_some() {
+            mode = UpdateMode::from_str(meta_mode.unwrap().to_str().unwrap()).map_err(|e| {
+                Status::invalid_argument(format!(
+                    "Unable to parse metadata.mode {}. Possible values are Upsert or Update",
+                    e.to_string()
+                ))
+            })?;
+        }
 
         let request = request.get_ref();
-        api::items::update_one(&self.data_sources.{{plural_name}}, request).await
+        api::items::update_one(&self.data_sources.{{plural_name}}, request, mode).await
     }
 
     async fn delete_{{name}}(

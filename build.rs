@@ -5,7 +5,7 @@ fn main() {
     // config.compile_well_known_types();
     config.type_attribute("{{pascal}}", "#[derive(serde::Serialize, serde::Deserialize)]");
     config.type_attribute(
-        "Timestamp",
+        "VersionMetadata",
         "#[derive(serde::Serialize, serde::Deserialize)]",
     );
     config.field_attribute("{{pascal}}.id", "#[serde(rename = \"_id\", serialize_with = \"crate::db::id::serialize\", deserialize_with = \"crate::db::id::deserialize\")]");

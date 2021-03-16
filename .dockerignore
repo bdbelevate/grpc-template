@@ -2,3 +2,4 @@ target
 mongo
 .garden
 node_modules
+Dockerfile

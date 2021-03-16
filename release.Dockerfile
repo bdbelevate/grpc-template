@@ -1,46 +1,26 @@
-# build from standard rust alpine
-FROM cosmeng/rust:1.48
+# build from base rust service image
+FROM cosmeng/rust-service-base:v1.2-release as builder
 
-# prebuild stuff
 WORKDIR /app
 
-COPY Cargo.toml Cargo.toml
-RUN mkdir src/
-RUN echo "fn main() {println!(\"if you see this, the build broke\")}" > src/main.rs
+# # now build with the actual source files
+COPY src src
+COPY proto proto
+COPY build.rs build.rs
 
-# this build is here to help prevent full rebuilds when not needed
-RUN RUSTFLAGS='-C target-feature=-crt-static' cargo build --release
-RUN rm -f target/release/deps/{{project-name}}*
+RUN touch build.rs
+RUN touch src/main.rs
 
-COPY build.rs ./build.rs
-COPY ./proto ./proto
 ENV PROTOC=/usr/bin/protoc
-RUN rm -rf src
-COPY ./src ./src
-COPY ./examples ./examples
-RUN RUSTFLAGS='-C target-feature=-crt-static' cargo build --release
+RUN cargo build --release
 
+FROM cosmeng/alpine-run-base:1.0
 
-# ------------------------------------------------------------------------------
-# Final Stage
-# ------------------------------------------------------------------------------
-
-FROM alpine:3.12
+# add minimum requirements
 RUN apk update &&\
-  apk add binutils
-# add ssl dependencies
-# RUN apk add openssl-dev
+  apk add binutils musl protoc openssl-dev
 
-RUN addgroup -g 1000 appuser
-RUN adduser -D -s /bin/sh -u 1000 -G appuser appuser
+COPY --from=builder /app/target/release/rust-service .
 
-WORKDIR /home/{{project-name}}/bin/
-
-RUN mkdir examples
-COPY --from=cargo-build /app/examples ./examples
-COPY --from=cargo-build /app/target/release/{{project-name}} .
-
-RUN chown appuser:appuser {{project-name}}
-
-USER appuser
-CMD ["./{{project-name}}"]
+# run service
+CMD ["./rust-service"]

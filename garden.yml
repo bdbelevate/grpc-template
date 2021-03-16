@@ -9,7 +9,7 @@ hotReload:
       target: /app/src
     - source: proto
       target: /app/proto
-exclude: ["mongo", "target", ".trigger", ".garden"]
+exclude: ["target", ".trigger", ".garden"]
 services:
   - name: {{project-name}}
     dependencies:
@@ -22,7 +22,7 @@ services:
         kind: Mapping
         name: {{project-name}}-mapping
         grpc: True
-        prefix: /cosm.{{name | downcase}}.{{pascal}}Service/
+        prefix: /${environment.namespace}/cosm.{{name | downcase}}.{{pascal}}Service/
         rewrite: /cosm.{{name | downcase}}.{{pascal}}Service/
         service: {{project-name}}.cosm-services-${environment.namespace}:10000
     env:
