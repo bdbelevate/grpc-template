@@ -98,12 +98,12 @@ pub async fn stream(
             .then(|c| match c {
                 Ok(doc) => {
                     let item_result: Option<{{pascal}}> = from_bson(Bson::Document(doc)).map_or_else(
-		    	|e| {
+                        |e| {
                             info!("Parse error: {:?}", e);
                             None
                         },
                         Some,
-		    );
+                    );
                     future::ready(item_result)
                 }
                 Err(_) => future::ready(None),
@@ -158,32 +158,32 @@ pub async fn update_one(
     if let Some(object) = request.object {
         let object_id = object.id.clone();
         let id = ID::from_string(object_id.clone())?;
-
         let query = doc! { "_id": id.to_bson() };
 
-	// update if there's a mask and paths
-	if let Some(mask) = &request.mask {
-	    if !mask.paths.is_empty() {
-	        let doc = mask.paths.iter().fold(doc! {}, |mut doc, path| {
-	            match path.as_str() {
-	                "name" => doc.insert("name", request.name.to_owned()),
-	                "description" => doc.insert("description", request.description.to_owned()),
-	                "project_ids" => doc.insert("project_ids", request.project_ids.to_owned()),
-	                "{{name}}_type" => doc.insert("{{name}}_type", request.{{name}}_type.to_owned()),
-	                _ => {
-	                    warn!("Path: {} is not supported", path);
-	                    None
-	                }
-	            };
-	            doc
-	        });
+        // update if there's a mask and paths
+        if let Some(mask) = &request.mask {
+            if !mask.paths.is_empty() {
+                let mut doc = mask.paths.iter().fold(doc! {}, |mut doc, path| {
+                    match path.as_str() {
+                        "name" => doc.insert("name", object.name.to_owned()),
+                        "description" => doc.insert("description", object.description.to_owned()),
+                        "project_ids" => doc.insert("project_ids", object.project_ids.to_owned()),
+                        "{{name}}_type" => doc.insert("{{name}}_type", object.{{name}}_type.to_owned()),
+                        _ => {
+                            warn!("Path: {} is not supported", path);
+                            None
+                        }
+                    };
+                    doc
+                });
                 // add additional metadata
                 doc.insert("version_metadata.modified_at", current_timestamp());
                 doc.insert("version_metadata.modified_by", String::from(user_id()));
                 let mut upsert_overrides = doc! {};
                 upsert_overrides.insert("version_metadata.created_at", current_timestamp());
                 upsert_overrides.insert("version_metadata.created_by", String::from(user_id()));
-            	let result = collection
+
+                let result = collection
                     .update_one(
                         query,
                         doc! { "$set": doc, "$setOnInsert": upsert_overrides },
@@ -193,7 +193,7 @@ pub async fn update_one(
                     .map_err(|e| Status::internal(e.to_string()))?;
                 debug!("Update result: {:?}", result);
             }
-    	}
+        }
 
         // get the updated object
         get_by_id(collection, &object_id).await

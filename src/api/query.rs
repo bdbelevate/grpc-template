@@ -1,6 +1,6 @@
 use mongodb::bson::{doc, Document};
 {% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
-use crate::category::&List{{pascal}}sRequest;
+use crate::{{name}}::&List{{pascal}}sRequest;
 use crate::db::id::ID;
 
 pub fn get_list_query(request: &List{{pascal}}sRequest) -> Document {
