@@ -15,7 +15,6 @@ use tonic::{Code, Response, Status};
 
 use crate::db::id::{with_bson, ID};
 use crate::models::items::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request, UpdateMode};
-use crate::UpdateMode;
 
 pub(crate) async fn create_one(
     collection: &Collection,
