@@ -9,26 +9,28 @@ edition = "2018"
 # NOTE!!! These are not used by garden.
 # You need to change the rust-service-base if you want something different
 [dependencies]
-async-stream = "0.3.0"
-dotenv = "0.15.0"
-env_logger = "0.8.2"
-futures = "0.3.12"
-futures-core = "0.3.12"
-futures-util = "0.3.12"
-log = "0.4.11"
-mongodb = "1.1.1"
-prost = { version = "0.6.1", features = ["prost-derive"] }
-prost-types = "0.6.1"
-rand = "0.7.3"
-rust-utils-lib = { version = "0.1.0", registry = "cosm-cosm-rust" }
-serde = { version = "1.0.118", features = ["derive"] }
-serde_json = "1.0.61"
-strum = "0.20.0"
-strum_macros = "0.20.0"
-tokio = { version = "0.2.24", features = ["macros", "sync", "stream", "time"] }
-tonic = "0.3.1"
-uuid = { version = "0.8.1", features = ["serde", "v4"] }
+async-stream = "=0.3.1"
+dotenv = "=0.15.0"
+env_logger = "=0.8.3"
+futures = "=0.3.14"
+futures-core = "=0.3.14"
+futures-util = "=0.3.14"
+lazy_static = "=1.4.0"
+log = "=0.4.14"
+mongodb = "=1.2.1"
+prost = { version = "=0.6.1", features = ["prost-derive"] }
+prost-types = "=0.6.1"
+rand = "=0.8.3"
+rust-jwt-lib = { version = "=0.3.1", registry = "cosm-cosm-rust", features = ["tonic_support"] }
+rust-utils-lib = { version = "=0.1.0", registry = "cosm-cosm-rust" }
+serde = { version = "=1.0.125", features = ["derive"] }
+serde_json = "=1.0.64"
+strum = "=0.20.0"
+strum_macros = "=0.20.1"
+tokio = { version = "=0.2.25", features = ["macros", "stream", "sync", "time"] }
+tonic = "=0.3.1"
+uuid = { version = "=0.8.2", features = ["serde", "v4"] }
 
 [build-dependencies]
-prost-build = { version = "0.6.1" }
-tonic-build = "0.3.1"
+prost-build = { version = "=0.6.1" }
+tonic-build = "=0.3.1"

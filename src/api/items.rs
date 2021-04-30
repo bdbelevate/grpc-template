@@ -1,3 +1,5 @@
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
+
 use futures::future;
 use futures::stream::StreamExt;
 use log::{debug, error, info, warn};
@@ -10,9 +12,9 @@ use prost_types::FieldMask;
 use rust_utils_lib::time_utils::current_timestamp;
 use tokio::sync::mpsc;
 use tonic::{Code, Response, Status};
-{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
+
 use crate::db::id::{with_bson, ID};
-use crate::{{name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
+use crate::models::items::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
 use crate::UpdateMode;
 
 pub async fn create_one(
