@@ -1,5 +1,5 @@
 # build from base rust service image
-FROM cosmeng/rust-service-base:v1.2-release as builder
+FROM cosmeng/rust-service-base:v2.2-release as builder
 
 WORKDIR /app
 

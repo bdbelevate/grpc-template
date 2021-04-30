@@ -4,14 +4,14 @@ use mongodb::Collection;
 use std::env;
 use std::sync::Arc;
 {% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
-pub mod id;
+pub(crate) mod id;
 
 #[derive(Clone)]
 pub struct DataSources {
     pub {{name}}s: Collection,
 }
 
-pub async fn connect() -> Arc<DataSources> {
+pub(crate) async fn connect() -> Arc<DataSources> {
     // set up database connection pool
     let mongo_url = env::var("MONGO_URL").expect("MONGO_URL must be set");
     let mongo_db_name = env::var("MONGO_DB_NAME").expect("MONGO_DB_NAME must be set");

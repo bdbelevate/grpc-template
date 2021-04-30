@@ -1,3 +1,5 @@
+{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
+
 use futures::future;
 use futures::stream::StreamExt;
 use log::{debug, error, info, warn};
@@ -10,12 +12,11 @@ use prost_types::FieldMask;
 use rust_utils_lib::time_utils::current_timestamp;
 use tokio::sync::mpsc;
 use tonic::{Code, Response, Status};
-{% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
-use crate::db::id::{with_bson, ID};
-use crate::{{name}}::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
-use crate::UpdateMode;
 
-pub async fn create_one(
+use crate::db::id::{with_bson, ID};
+use crate::models::items::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request, UpdateMode};
+
+pub(crate) async fn create_one(
     collection: &Collection,
     mut item: {{pascal}},
 ) -> Result<Response<{{pascal}}>, tonic::Status> {
@@ -48,7 +49,7 @@ pub async fn create_one(
     }
 }
 
-pub async fn get_by_id(
+pub(crate) async fn get_by_id(
     collection: &Collection,
     id: &str,
 ) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
@@ -70,7 +71,7 @@ pub async fn get_by_id(
     }
 }
 
-pub async fn stream(
+pub(crate) async fn stream(
     collection: &Collection,
     request: &List{{pascal}}sRequest,
 ) -> Response<mpsc::Receiver<Result<{{pascal}}, Status>>> {
@@ -125,7 +126,7 @@ pub async fn stream(
     Response::new(rx)
 }
 
-pub async fn update_one(
+pub(crate) async fn update_one(
     collection: &Collection,
     request: &Update{{pascal}}Request,
     mode: UpdateMode,
@@ -202,7 +203,7 @@ pub async fn update_one(
     }
 }
 
-pub async fn delete_by_id(
+pub(crate) async fn delete_by_id(
     collection: &Collection,
     id: &str,
 ) -> Result<tonic::Response<()>, tonic::Status> {

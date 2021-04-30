@@ -1,9 +1,11 @@
-use mongodb::bson::{doc, Document};
 {% assign name = crate_name | remove: "_service" %}{% assign pascal = name | pascal_case %}
-use crate::{{name}}::List{{pascal}}sRequest;
-use crate::db::id::ID;
 
-pub fn get_list_query(request: &List{{pascal}}sRequest) -> Document {
+use mongodb::bson::{doc, Document};
+
+use crate::db::id::ID;
+use crate::models::items::List{{pascal}}sRequest;
+
+pub(crate) fn get_list_query(request: &List{{pascal}}sRequest) -> Document {
     let ignored_ids = request.ignored_ids.iter().fold(vec![], |mut acc, id| {
         let id = ID::from_string(id);
         if let Ok(id) = id {
