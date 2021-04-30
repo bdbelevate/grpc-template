@@ -2,8 +2,11 @@
 
 tonic::include_proto!("cosm.{{name}}");
 
+use std::{str::FromStr, sync::Arc};
+
 use {{name}}_service_server::{{pascal}}Service;
 use log::{debug, warn};
+use strum_macros::EnumString;
 use tokio::sync::mpsc::Receiver;
 use tonic::{Request, Response, Status};
 
@@ -11,8 +14,14 @@ use crate::api::items::{ create_one, delete_by_id, get_by_id, stream, update_one
 use crate::db::DataSources;
 
 #[derive(Clone)]
-pub struct Service {
-    data_sources: Arc<DataSources>,
+pub(crate) struct Service {
+    pub data_sources: Arc<DataSources>,
+}
+
+#[derive(PartialEq, EnumString, Debug)]
+pub(crate) enum UpdateMode {
+    Update,
+    Upsert,
 }
 
 #[tonic::async_trait]

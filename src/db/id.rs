@@ -9,14 +9,14 @@ use crate::api::error::ServiceError;
 // TODO: Ideally we figure out how to have prost just convert anything with the name id into an ID
 /// An ID as defined by the GraphQL specification
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
-pub enum ID {
+pub(crate) enum ID {
     ObjectId(ObjectId),
     String(String),
     Int64(i64),
 }
 
 impl ID {
-    pub fn from_string<S: Into<String>>(value: S) -> Result<Self, ServiceError> {
+    pub(crate) fn from_string<S: Into<String>>(value: S) -> Result<Self, ServiceError> {
         let s: String = value.into();
         if let Some(stripped) = s.strip_prefix("$oid:") {
             match ObjectId::with_string(stripped) {
@@ -37,7 +37,7 @@ impl ID {
         }
     }
 
-    pub fn to_bson(&self) -> Bson {
+    pub(crate) fn to_bson(&self) -> Bson {
         match self {
             ID::ObjectId(o) => Bson::ObjectId(o.clone()),
             ID::String(s) => Bson::String(s.to_string()),
@@ -46,7 +46,7 @@ impl ID {
     }
 }
 
-pub fn serialize<S>(s: &str, serializer: S) -> Result<S::Ok, S::Error>
+pub(crate) fn serialize<S>(s: &str, serializer: S) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
@@ -116,14 +116,14 @@ impl<'de> Visitor<'de> for IDVisitor {
     }
 }
 
-pub fn deserialize<'de, D>(deserializer: D) -> Result<String, D::Error>
+pub(crate) fn deserialize<'de, D>(deserializer: D) -> Result<String, D::Error>
 where
     D: Deserializer<'de>,
 {
     deserializer.deserialize_any(IDVisitor)
 }
 
-pub fn with_bson(value: &Bson) -> String {
+pub(crate) fn with_bson(value: &Bson) -> String {
     match value.into() {
         Bson::String(s) => s,
         Bson::ObjectId(o) => format!("$oid:{}", o.to_hex()),

@@ -14,10 +14,10 @@ use tokio::sync::mpsc;
 use tonic::{Code, Response, Status};
 
 use crate::db::id::{with_bson, ID};
-use crate::models::items::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request};
+use crate::models::items::{List{{pascal}}sRequest, {{pascal}}, Update{{pascal}}Request, UpdateMode};
 use crate::UpdateMode;
 
-pub async fn create_one(
+pub(crate) async fn create_one(
     collection: &Collection,
     mut item: {{pascal}},
 ) -> Result<Response<{{pascal}}>, tonic::Status> {
@@ -50,7 +50,7 @@ pub async fn create_one(
     }
 }
 
-pub async fn get_by_id(
+pub(crate) async fn get_by_id(
     collection: &Collection,
     id: &str,
 ) -> Result<tonic::Response<{{pascal}}>, tonic::Status> {
@@ -72,7 +72,7 @@ pub async fn get_by_id(
     }
 }
 
-pub async fn stream(
+pub(crate) async fn stream(
     collection: &Collection,
     request: &List{{pascal}}sRequest,
 ) -> Response<mpsc::Receiver<Result<{{pascal}}, Status>>> {
@@ -127,7 +127,7 @@ pub async fn stream(
     Response::new(rx)
 }
 
-pub async fn update_one(
+pub(crate) async fn update_one(
     collection: &Collection,
     request: &Update{{pascal}}Request,
     mode: UpdateMode,
@@ -204,7 +204,7 @@ pub async fn update_one(
     }
 }
 
-pub async fn delete_by_id(
+pub(crate) async fn delete_by_id(
     collection: &Collection,
     id: &str,
 ) -> Result<tonic::Response<()>, tonic::Status> {

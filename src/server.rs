@@ -4,7 +4,7 @@ use log::warn;
 use tonic::transport::Server;
 
 use crate::db;
-use crate::models::{items::Service, {{name}}_service_server::{{pascal}}ServiceServer};
+use crate::models::items::{Service, {{name}}_service_server::{{pascal}}ServiceServer};
 
 pub(crate) async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "0.0.0.0:10000".parse().unwrap();

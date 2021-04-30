@@ -1,3 +1,3 @@
-pub mod error;
-pub mod items;
+pub(crate) mod error;
+pub(crate) mod items;
 mod query;
